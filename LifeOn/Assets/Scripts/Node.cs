@@ -5,16 +5,11 @@ using UnityEngine;
 public class Node
 {
     public bool walkable;
+    public Vector3 worldPosition;
 
-    // Start is called before the first frame update
-    void Start()
+    public Node(bool _walkable, Vector3 _worldPos)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        walkable = _walkable;
+        worldPosition = _worldPos;
     }
 }
