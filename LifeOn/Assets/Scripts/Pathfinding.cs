@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
+using System.Diagnostics;
 
 public class Pathfinding : MonoBehaviour
 {
+    public Transform seeker, target;
+
     Grid grid;
 
     private void Awake()
@@ -11,8 +15,16 @@ public class Pathfinding : MonoBehaviour
         grid = GetComponent<Grid>();
     }
 
+    private void Update()
+    {
+        FindPath(seeker.position, target.position);
+    }
+
     void FindPath(Vector3 startPos, Vector3 targetPos)
     {
+        Stopwatch sw = new Stopwatch();
+        sw.Start();
+
         Node startNode = grid.NodeFromWorldPoint(startPos);
         Node targetNode = grid.NodeFromWorldPoint(targetPos);
 
@@ -36,6 +48,7 @@ public class Pathfinding : MonoBehaviour
 
             if(currentNode == targetNode)
             {
+                RetracePath(startNode, targetNode);
                 return;
             }
 
@@ -59,6 +72,22 @@ public class Pathfinding : MonoBehaviour
         }
     }
 
+    void RetracePath(Node startNode, Node endNode)
+    {
+        List<Node> path = new List<Node>();
+        Node currentNode = endNode;
+
+        while (currentNode != startNode)
+        {
+            path.Add(currentNode);
+            currentNode = currentNode.parent;
+        }
+
+        path.Reverse();
+
+        grid.path = path;
+    }
+
     int GetDistance(Node nodeA, Node nodeB)
     {
         int dstX = Mathf.Abs(nodeA.gridX - nodeB.gridX);
@@ -67,7 +96,8 @@ public class Pathfinding : MonoBehaviour
         if(dstX > dstY)
         {
             return 14 * dstY + 10 * (dstX - dstY);
-            return 14 * dstX + 10 * (dstY - dstX);
         }
+
+        return 14 * dstX + 10 * (dstY - dstX);
     }
 }
