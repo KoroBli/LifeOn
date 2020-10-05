@@ -412,6 +412,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 2001858325}
+  speed: 20
+  turnDst: 5
+  turnSpeed: 5
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -849,6 +852,7 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 1024
     terrainPenalty: 5
+  obstacleProximityPenalty: 10
 --- !u!114 &952473400
 MonoBehaviour:
   m_ObjectHideFlags: 0

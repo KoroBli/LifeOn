@@ -4,21 +4,23 @@ using System.Collections;
 public class Unit : MonoBehaviour
 {
 	public Transform target;
-	float speed = 20;
-	Vector3[] path;
-	int targetIndex;
+	public float speed = 20;
+	public float turnDst = 5;
+	public float turnSpeed = 3;
+
+	Path path;
 
 	void Start()
 	{
 		PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
 	}
 
-	public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
+	public void OnPathFound(Vector3[] waypoints, bool pathSuccessful)
 	{
 		if (pathSuccessful)
 		{
-			path = newPath;
-			targetIndex = 0;
+			path = new Path(waypoints, transform.position, turnDst);
+			
 			StopCoroutine("FollowPath");
 			StartCoroutine("FollowPath");
 		}
@@ -26,22 +28,34 @@ public class Unit : MonoBehaviour
 
 	IEnumerator FollowPath()
 	{
-		Vector3 currentWaypoint = path[0];
-		while (true)
+		bool followingPath = true;
+		int pathIndex = 0;
+		transform.LookAt(path.lookPoints[0]);
+
+		while (followingPath)
 		{
-			if (transform.position == currentWaypoint)
-			{
-				targetIndex++;
-				if (targetIndex >= path.Length)
-				{
-					yield break;
-				}
-				currentWaypoint = path[targetIndex];
-			}
+			Vector2 pos2D = new Vector2(transform.position.x, transform.position.z);
+			while(path.turnBoundaries[pathIndex].HasCrossedLine(pos2D))
+            {
+				if(pathIndex == path.finishLineIndex)
+                {
+					followingPath = false;
+					break;
+                }
+				else
+                {
+					pathIndex++;
+                }
+            }
 
-			transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, speed * Time.deltaTime);
+			if(followingPath)
+            {
+				Quaternion targetRotation = Quaternion.LookRotation(path.lookPoints[pathIndex] - transform.position);
+				transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
+				transform.Translate(Vector3.forward * Time.deltaTime * speed, Space.Self);
+            }
+
 			yield return null;
-
 		}
 	}
 
@@ -49,20 +63,7 @@ public class Unit : MonoBehaviour
 	{
 		if (path != null)
 		{
-			for (int i = targetIndex; i < path.Length; i++)
-			{
-				Gizmos.color = Color.black;
-				Gizmos.DrawCube(path[i], Vector3.one);
-
-				if (i == targetIndex)
-				{
-					Gizmos.DrawLine(transform.position, path[i]);
-				}
-				else
-				{
-					Gizmos.DrawLine(path[i - 1], path[i]);
-				}
-			}
+			path.DrawWithGizmos();
 		}
 	}
 }
