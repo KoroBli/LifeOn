@@ -56,6 +56,14 @@ public struct Line
         return GetSide(p) != approachSide;
     }
 
+    public float DistanceFromPoint(Vector2 p)
+    {
+        float yInterceptPerpendicular = p.y - gradientPerpendicular * p.x;
+        float intersectX = (yInterceptPerpendicular - y_intercept) / (gradient - gradientPerpendicular);
+        float intersectY = gradient * intersectX + y_intercept;
+        return Vector2.Distance(p, new Vector2(intersectX, intersectY));
+    }
+
     public void DrawWithGizmos(float lenght)
     {
         Vector3 lineDir = new Vector3(1, 0, gradient).normalized;

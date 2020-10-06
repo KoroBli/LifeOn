@@ -16,8 +16,8 @@ TagManager:
   - Unwalkable
   - Road
   - Grass
-  - 
-  - 
+  - Target
+  - NoVisionPass
   - 
   - 
   - 
