@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEditor;
 using System.CodeDom;
 
-[CustomEditor (typeof (FielOfView))]
+[CustomEditor (typeof (FieldOfView))]
 public class FOVEditor : Editor
 {
     private void OnSceneGUI()
     {
-        FielOfView fov = (FielOfView)target;
+        FieldOfView fov = (FieldOfView)target;
         Handles.color = Color.white;
         Handles.DrawWireArc(fov.transform.position, Vector3.up, Vector3.forward, 360, fov.viewRadius);
         Vector3 viewAngleA = fov.DirFromAngle(-fov.viewAngle / 2, false);
