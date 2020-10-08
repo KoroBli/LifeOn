@@ -15,6 +15,7 @@ public class FieldOfView : MonoBehaviour
     public List<Transform> visibleTargets = new List<Transform>();
 
     public float meshResolution;
+    public int edgeResolveIterations;
 
     public MeshFilter viewMeshFilter;
     Mesh viewMesh;
@@ -72,7 +73,7 @@ public class FieldOfView : MonoBehaviour
         for(int i = 0; i <= stepCount; i++)
         {
             float angle = transform.eulerAngles.y - viewAngle / 2 + stepAngleSize * i;
-            ViewCastInfo newViewCast = viewCast(angle);
+            ViewCastInfo newViewCast = ViewCast(angle);
 
             if(i > 0)
             {
@@ -111,10 +112,19 @@ public class FieldOfView : MonoBehaviour
 
     EdgeInfo FindEdge(ViewCastInfo minViewCast, ViewCastInfo maxViewCast)
     {
-        float minAngle = minView
+        float minAngle = minViewCast.angle;
+        float maxAngle = maxViewCast.angle;
+        Vector3 minPoint = Vector3.zero;
+        Vector3 maxPoint = Vector3.zero;
+
+        for(int i = 0; i < edgeResolveIterations; i++)
+        {
+            float angle = (minAngle + maxAngle) / 2;
+            ViewCastInfo newViewCast = ViewCast(angle);
+        }
     }
 
-    ViewCastInfo viewCast(float globalAngle)
+    ViewCastInfo ViewCast(float globalAngle)
     {
         Vector3 dir = DirFromAngle(globalAngle, true);
         RaycastHit hit;
