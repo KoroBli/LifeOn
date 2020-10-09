@@ -2,17 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LightingPreset : MonoBehaviour
+[System.Serializable]
+[CreateAssetMenu(fileName = "Lighting Preset", menuName = "Scriptables/Lighting Preset", order = 1)]
+public class LightingPreset : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Gradient AmbientColor;
+    public Gradient DirectionalColor;
+    public Gradient FogColor;
 }
