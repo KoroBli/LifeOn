@@ -11,6 +11,9 @@ public class WeatherManager : MonoBehaviour
     public Season currentSeason;
     public Weather currentWeather;
 
+    public GameObject rain;
+    public GameObject snow;
+
     [Header("Time Setting")]
     public float seasonTime;
     public float springTime;
@@ -74,16 +77,19 @@ public class WeatherManager : MonoBehaviour
             switch (weatherType)
             {
                 case Weather.SUNNY:
-                    currentSeason = Season.SPRING;
+                    currentWeather = Weather.SUNNY;
+                    
                     break;
                 case Weather.HOTSUN:
-                    currentSeason = Season.SUMMER;
+                    currentWeather = Weather.HOTSUN;
                     break;
                 case Weather.RAIN:
-                    currentSeason = Season.AUTUM;
+                    currentWeather = Weather.RAIN;
+                    
                     break;
                 case Weather.SNOW:
-                    currentSeason = Season.WINTER;
+                    currentWeather = Weather.SNOW;
+                    
                     break;
             }
         }
