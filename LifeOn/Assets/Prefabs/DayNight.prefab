@@ -229,6 +229,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a4ae5bcc5fe5114c9603270c27cc259, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeSpeed: 20
+  timeSpeed: 2
   sun: {fileID: 3554340939763626789}
   moon: {fileID: 3554340938951254234}
