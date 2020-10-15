@@ -1,25 +1,52 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using UnityEngine.UIElements;
 
 public class Animal : MonoBehaviour
 {
 	const float minPathUpdateTime = .2f;
 	const float pathUpdateMoveThreshhold = .5f;
 
-	public Transform target;
+	[SerializeField] private Transform target;
+	public float wanderTimeRest = 5;
 	public float speed = 20;
 	public float turnDst = 5;
 	public float turnSpeed = 3;
 	public float stoppingDst = 10;
 
+	bool isWandering = true;
+
 	Path path;
 
 	void Start()
 	{
-		StartCoroutine("UpdatePath");
+		if (target != null)
+		{
+			StartCoroutine("UpdatePath");
+		}
 	}
 
-	public void OnPathFound(Vector3[] waypoints, bool pathSuccessful)
+    private void Update()
+    {
+        if(isWandering)
+        {
+			wanderTimeRest += Time.deltaTime;
+
+			if (wanderTimeRest >= 5)
+			{
+				StartCoroutine("Wandering");
+				wanderTimeRest = 0;
+			}
+        }
+    }
+
+	IEnumerator Wandering()
+    {
+		yield return null;
+    }
+
+    public void OnPathFound(Vector3[] waypoints, bool pathSuccessful)
 	{
 		if (pathSuccessful)
 		{
@@ -32,22 +59,25 @@ public class Animal : MonoBehaviour
 
 	IEnumerator UpdatePath()
     {
-		if (Time.timeSinceLevelLoad < .3f)
+		if (target != null)
 		{
-			yield return new WaitForSeconds(.3f);
-		}
-		PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
-
-		float sqrMoveThreshhold = pathUpdateMoveThreshhold * pathUpdateMoveThreshhold;
-		Vector3 targetPosOld = target.position;
-
-		while (true)
-		{
-			yield return new WaitForSeconds(minPathUpdateTime);
-			if ((target.position - targetPosOld).sqrMagnitude > sqrMoveThreshhold)
+			if (Time.timeSinceLevelLoad < .3f)
 			{
-				PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
-				targetPosOld = target.position;
+				yield return new WaitForSeconds(.3f);
+			}
+			PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
+
+			float sqrMoveThreshhold = pathUpdateMoveThreshhold * pathUpdateMoveThreshhold;
+			Vector3 targetPosOld = target.position;
+
+			while (true)
+			{
+				yield return new WaitForSeconds(minPathUpdateTime);
+				if ((target.position - targetPosOld).sqrMagnitude > sqrMoveThreshhold)
+				{
+					PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
+					targetPosOld = target.position;
+				}
 			}
 		}
     }

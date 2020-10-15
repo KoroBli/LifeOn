@@ -34,23 +34,20 @@ public class WeatherManager : MonoBehaviour
     public Color autumColor;
     public Color winterColor;
 
-    public int currentYear;
-
     private void Start()
     {
-        this.currentSeason = Season.SPRING;
-        this.currentWeather = Weather.SUNNY;
-        this.currentYear = 1;
+        currentSeason = Season.SPRING;
+        currentWeather = Weather.SUNNY;
 
-        this.seasonTime = this.springTime;
+        seasonTime = springTime;
 
-        this.defaultLightColor = this.sunLight.color;
-        this.defaultLightIntensity = this.sunLight.intensity;
+        defaultLightColor = sunLight.color;
+        defaultLightIntensity = sunLight.intensity;
     }
 
     public void ChangeSeason(Season seasonType)
     {
-        if(seasonType != this.currentSeason)
+        if(seasonType != currentSeason)
         {
             switch(seasonType)
             {
@@ -72,7 +69,7 @@ public class WeatherManager : MonoBehaviour
 
     public void ChangeWeather(Weather weatherType)
     {
-        if (weatherType != this.currentWeather)
+        if (weatherType != currentWeather)
         {
             switch (weatherType)
             {
@@ -97,61 +94,61 @@ public class WeatherManager : MonoBehaviour
 
     private void Update()
     {
-        this.seasonTime -= Time.deltaTime;
+        seasonTime -= Time.deltaTime;
 
-        if(this.currentSeason == Season.SPRING)
+        if(currentSeason == Season.SPRING)
         {
             ChangeWeather(Weather.SUNNY);
 
-            LerpSunIntensity(this.sunLight, defaultLightIntensity);
-            LerpLightColor(this.sunLight, defaultLightColor);
+            LerpSunIntensity(sunLight, defaultLightIntensity);
+            LerpLightColor(sunLight, defaultLightColor);
 
-            if(this.seasonTime <= 0f)
+            if(seasonTime <= 0f)
             {
                 ChangeSeason(Season.SUMMER);
-                this.seasonTime = this.summerTime;
+                seasonTime = summerTime;
             }
         }
 
-        if(this.currentSeason == Season.SUMMER)
+        if(currentSeason == Season.SUMMER)
         {
             ChangeWeather(Weather.HOTSUN);
 
-            LerpSunIntensity(this.sunLight, summerLightIntensity);
-            LerpLightColor(this.sunLight, summerColor);
+            LerpSunIntensity(sunLight, summerLightIntensity);
+            LerpLightColor(sunLight, summerColor);
 
-            if (this.seasonTime <= 0f)
+            if (seasonTime <= 0f)
             {
                 ChangeSeason(Season.AUTUM);
-                this.seasonTime = this.autumTime;
+                seasonTime = autumTime;
             }
         }
 
-        if (this.currentSeason == Season.AUTUM)
+        if (currentSeason == Season.AUTUM)
         {
             ChangeWeather(Weather.RAIN);
 
-            LerpSunIntensity(this.sunLight, autumLightIntensity);
-            LerpLightColor(this.sunLight, autumColor);
+            LerpSunIntensity(sunLight, autumLightIntensity);
+            LerpLightColor(sunLight, autumColor);
 
-            if (this.seasonTime <= 0f)
+            if (seasonTime <= 0f)
             {
                 ChangeSeason(Season.WINTER);
-                this.seasonTime = this.winterTime;
+                seasonTime = winterTime;
             }
         }
 
-        if (this.currentSeason == Season.WINTER)
+        if (currentSeason == Season.WINTER)
         {
             ChangeWeather(Weather.SNOW);
 
-            LerpSunIntensity(this.sunLight, winterLightIntensity);
-            LerpLightColor(this.sunLight, winterColor);
+            LerpSunIntensity(sunLight, winterLightIntensity);
+            LerpLightColor(sunLight, winterColor);
 
-            if (this.seasonTime <= 0f)
+            if (seasonTime <= 0f)
             {
                 ChangeSeason(Season.SPRING);
-                this.seasonTime = this.springTime;
+                seasonTime = springTime;
             }
         }
     }

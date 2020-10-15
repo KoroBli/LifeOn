@@ -13,7 +13,7 @@ public class Grid : MonoBehaviour
 	LayerMask walkableMask;
 	Dictionary<int, int> walkableRegionsDictionary = new Dictionary<int, int>();
 
-	Node[,] grid;
+	public Node[,] grid;
 
 	float nodeDiameter;
 	int gridSizeX, gridSizeY;
